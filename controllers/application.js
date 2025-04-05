@@ -23,18 +23,15 @@ const createApplication = async (req,res)=>{
 const getApplicationsByJob = async (req,res)=>{
     const { jobId } = req.params;
 
-    const applications = await Application.find({_id: jobId}).populate('applicantId', 'email name')
-    res.status(StatusCodes.OK).json({msg:'Applied Jobs Fetched Successfully', data:applications})
+    const applications = await Application.find({jobId}).populate('applicantId', 'email name')
+    res.status(StatusCodes.OK).json({msg:'Applied Jobs Fetched Successfully', data:applications, count:applications.length})
 }
 
 const getApplicationsByUser = async (req,res)=>{
     const {user:{userId}} = req;
-
-    const userApplications = await Application.find({applicantId: userId}).populate('jobId', 'company position');
-    // if(!job){
-    //     throw new NotFoundError(`No job with id ${jobId}`)
-    // }
-    res.status(StatusCodes.OK).json({msg:'User Applications Fetched Successfully', data:userApplications})
+    const userApplications = await Application.find({applicantId: userId}).populate('jobId');
+    // const userApplications = await Application.find({applicantId: userId}).populate('jobId', 'company position');
+    res.status(StatusCodes.OK).json({msg:'User Applications Fetched Successfully', data:userApplications, count:userApplications.length})
 }
 
 module.exports = {

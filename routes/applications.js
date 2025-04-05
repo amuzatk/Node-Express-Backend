@@ -7,7 +7,7 @@
 
 /**
  * @swagger
- * /application:
+ * /applications:
  *   post:
  *     summary: Create a new application
  *     tags: [Applications]
@@ -32,7 +32,7 @@
 
 /**
  * @swagger
- * /user/{userId}:
+ * /applications/user/{userId}:
  *   get:
  *     summary: Get all applications by a specific user
  *     tags: [Applications]
@@ -51,7 +51,7 @@
 
 /**
  * @swagger
- * /job/{id}:
+ * /applications/job/{id}:
  *   get:
  *     summary: Get all applications to a specific job
  *     tags: [Applications]
