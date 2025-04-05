@@ -20,11 +20,6 @@ const options = {
         description: "Local development server",
       },
     ],    
-    // servers: [
-    //   {
-    //     url: "http://localhost:3000/api/v1", // change if your base URL is different
-    //   },
-    // ],
     components: {
       securitySchemes: {
         bearerAuth: {

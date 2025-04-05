@@ -19,6 +19,7 @@ const authenticateUser = require('./middleware/authentication');
 //routers
 const authRoutes = require("./routes/auth");
 const jobRoutes = require("./routes/jobs");
+const applicationRoutes = require("./routes/applications");
 // error handler
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
@@ -42,6 +43,7 @@ app.get('/', (req, res) => {
 //routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/jobs",authenticateUser, jobRoutes);
+app.use("/api/v1/applications",authenticateUser, applicationRoutes);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
