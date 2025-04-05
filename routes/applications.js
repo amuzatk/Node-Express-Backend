@@ -27,7 +27,26 @@
  *                 type: string
  *     responses:
  *       201:
- *         description: Job application created successfully
+ *         description: Job application created
+ */
+
+/**
+ * @swagger
+ * /user/{userId}:
+ *   get:
+ *     summary: Get all applications by a specific user
+ *     tags: [Applications]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: Application found
+ *       404:
+ *         description: Application not found
  */
 
 /**
