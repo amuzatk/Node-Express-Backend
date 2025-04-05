@@ -1,5 +1,6 @@
 require('dotenv').config();
 require('express-async-errors');
+const setupSwagger = require("./swagger");
 
 // extra security packages
 const helmet = require('helmet');// Helmet enhances security by setting various HTTP headers to prevent common web vulnerabilities.
@@ -9,6 +10,9 @@ const rateLimiter = require('express-rate-limit');//Prevents brute-force attacks
 
 const express = require('express');
 const app = express();
+
+// middleware, routes, db, etc.
+setupSwagger(app); // enable swagger at /api-docs
 //DB Connection
 const connectDB = require('./db/connect');
 const authenticateUser = require('./middleware/authentication');
@@ -47,8 +51,10 @@ const port = process.env.PORT || 3000;
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URI)
-    app.listen(port, () =>
-      console.log(`Server is listening on port ${port}...`)
+    app.listen(port, () => {
+      console.log(`Server is listening on port ${port}...`);
+      console.log("Swagger docs available at http://localhost:3000/api-docs")
+    }
     );
   } catch (error) {
     console.log(error);

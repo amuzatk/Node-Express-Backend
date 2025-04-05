@@ -29,21 +29,21 @@ const register = async (req,res)=>{
     res.status(StatusCodes.CREATED).json({msg:"User Registered Successfully", user: {name: user.name}, token}); 
 }
 
-const register2 = async (req, res, next) => {
-    try {
-        const user = await User.create({ ...req.body });
-        const token = user.createJWT();
-        res.status(StatusCodes.CREATED).json({
-            msg: "User Registered Successfully",
-            user: { name: user.name },
-            token,
-        });
-    } catch (error) {
-        if (error.code === 11000) {
-            return next(new BadRequestError("This email is already registered. Please log in or use a different email."));
-        }
-        next(error); // Pass other errors to the global handler
-    }
-};
+// const register2 = async (req, res, next) => {
+//     try {
+//         const user = await User.create({ ...req.body });
+//         const token = user.createJWT();
+//         res.status(StatusCodes.CREATED).json({
+//             msg: "User Registered Successfully",
+//             user: { name: user.name },
+//             token,
+//         });
+//     } catch (error) {
+//         if (error.code === 11000) {
+//             return next(new BadRequestError("This email is already registered. Please log in or use a different email."));
+//         }
+//         next(error); // Pass other errors to the global handler
+//     }
+// };
 
 module.exports = {login, register}

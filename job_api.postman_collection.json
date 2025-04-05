@@ -16,7 +16,7 @@
 						"exec": [
 							"if (pm.response.code === 200) {",
 							"    let jsonData = pm.response.json();",
-							"    pm.environment.set(\"access_token\", jsonData.access_token);",
+							"    pm.environment.set(\"access_token\", jsonData.token);",
 							"}",
 							"",
 							"",
@@ -52,9 +52,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{URL}}/auth/login",
+					"raw": "{{PROD_URL}}/auth/login",
 					"host": [
-						"{{URL}}"
+						"{{PROD_URL}}"
 					],
 					"path": [
 						"auth",
@@ -256,7 +256,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"company\": \"Apple2\",\n\t\"position\": \"DevOps Engineer22\"\n}",
+					"raw": "{\n\t\"company\": \"Apple3\",\n\t\"position\": \"DevOps Engineer22\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -264,9 +264,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{URL}}/jobs",
+					"raw": "{{PROD_URL}}/jobs",
 					"host": [
-						"{{URL}}"
+						"{{PROD_URL}}"
 					],
 					"path": [
 						"jobs"
@@ -294,6 +294,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [
 					{
@@ -303,13 +313,13 @@
 					}
 				],
 				"url": {
-					"raw": "{{URL}}/jobs/67ebddf972596a3218abf1bf",
+					"raw": "{{URL}}/jobs/67ecab7cadbcc002b7d39513",
 					"host": [
 						"{{URL}}"
 					],
 					"path": [
 						"jobs",
-						"67ebddf972596a3218abf1bf"
+						"67ecab7cadbcc002b7d39513"
 					],
 					"query": [
 						{
