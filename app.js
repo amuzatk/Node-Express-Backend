@@ -50,17 +50,29 @@ app.use(errorHandlerMiddleware);
 
 const port = process.env.PORT || 3000;
 
+// const start = async () => {
+//   try {
+//     await connectDB(process.env.MONGO_URI)
+//     app.listen(port, () => {
+//       console.log(`Server is listening on port ${port}...`);
+//       console.log("Swagger docs available at http://localhost:3000/api-docs")
+//     }
+//     );
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 const start = async () => {
   try {
-    await connectDB(process.env.MONGO_URI)
+    await connectDB(); // now loads URI based on NODE_ENV
     app.listen(port, () => {
       console.log(`Server is listening on port ${port}...`);
-      console.log("Swagger docs available at http://localhost:3000/api-docs")
-    }
-    );
+      console.log("Swagger docs available at http://localhost:3000/api-docs");
+    });
   } catch (error) {
     console.log(error);
   }
 };
+
 
 start();
