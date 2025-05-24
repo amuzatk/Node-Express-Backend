@@ -25,6 +25,9 @@
  *                 type: string
  *               applicantId:
  *                 type: string
+ *     responses:
+ *       201:
+ *         description: Job application created
  */
 
 /**
@@ -39,6 +42,11 @@
  *         schema:
  *           type: string
  *         required: true
+ *     responses:
+ *       200:
+ *         description: Application found
+ *       404:
+ *         description: Application not found
  */
 
 /**
@@ -52,7 +60,12 @@
  *         name: id
  *         schema:
  *           type: string
- *         required: trueZ
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: Application found
+ *       404:
+ *         description: Application not found
  */
 
 const express = require("express");
