@@ -3,10 +3,6 @@ const {StatusCodes} = require('http-status-codes');
 const {BadRequestError, NotFoundError} = require('../errors')
 
 const createJob = async (req,res)=>{
-    // console.log(req.body,'body=');
-    // console.log(req.user,'user==');
-    // console.log(req.user.userId,'user.userId===');
-    // req.body.createdby = req.user.userId;
     const newJob = await Job.create({
         ...req.body,
         createdBy: req.user.userId//req.user is within the auth middleware
@@ -15,16 +11,11 @@ const createJob = async (req,res)=>{
 }
 
 const getJobs = async (req,res)=>{//fetch jobs of a user
-    // console.log(req.body,'jobs==')
-    // console.log(req.user,'req.user==')
     const jobs = await Job.find({createdBy:req.user.userId}).sort('createdAt');
     res.status(StatusCodes.OK).json({msg:'User Jobs Fetched Successfully', data: jobs, count: jobs.length})
 }
 
 const getJob = async (req,res)=>{
-    // console.log(req,'req==')
-    // console.log(req.params,'param==')
-    // console.log(req.user,'user==')
     const {user:{userId}, params:{id:jobId}} = req;
 
     const job = await Job.findOne({_id: jobId, createdBy: userId});

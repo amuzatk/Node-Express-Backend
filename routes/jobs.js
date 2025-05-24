@@ -25,16 +25,10 @@
  *                 type: string
  *               position:
  *                 type: string
- *     responses:
- *       201:
- *         description: Job created
  *
  *   get:
  *     summary: Get all jobs for the logged-in user
  *     tags: [Jobs]
- *     responses:
- *       200:
- *         description: List of jobs
  */
 
 /**
@@ -49,11 +43,6 @@
  *         schema:
  *           type: string
  *         required: true
- *     responses:
- *       200:
- *         description: Job found
- *       404:
- *         description: Job not found
  *
  *   patch:
  *     summary: Update a job
@@ -75,9 +64,6 @@
  *                 type: string
  *               position:
  *                 type: string
- *     responses:
- *       200:
- *         description: Job updated
  *
  *   delete:
  *     summary: Delete a job
@@ -88,9 +74,6 @@
  *         schema:
  *           type: string
  *         required: true
- *     responses:
- *       200:
- *         description: Job deleted
  */
 
 const express = require("express");

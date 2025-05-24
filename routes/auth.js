@@ -28,9 +28,6 @@
  *                 type: string
  *               password:
  *                 type: string
- *     responses:
- *       201:
- *         description: User registered
  */
 
 /**
@@ -53,9 +50,6 @@
  *                 type: string
  *               password:
  *                 type: string
- *     responses:
- *       200:
- *         description: Login successful
  */
 
 const express = require("express");
