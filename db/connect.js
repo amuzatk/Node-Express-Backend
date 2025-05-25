@@ -7,14 +7,18 @@ const connectDB = async () => {
     let dbURI;
 
     switch (env) {
-    //   case 'production':
-    //     dbURI = process.env.MONGO_URI_PROD;
-    //     break;
+      case 'production':
+        dbURI = process.env.MONGO_URI_PROD;
+        break;
       case 'test':
         dbURI = process.env.MONGO_URI_TEST;
         break;
       default:
         dbURI = process.env.MONGO_URI_DEV;
+    }
+
+    if (!dbURI) {
+      throw new Error(`MONGO_URI is not defined for environment: ${env}`);
     }
 
     const conn = await mongoose.connect(dbURI);
