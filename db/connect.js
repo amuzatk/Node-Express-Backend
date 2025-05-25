@@ -1,4 +1,4 @@
-// REQUIRES RENDER PRODUCTION PAYMENTS
+// /db/connect.js
 const mongoose = require("mongoose");
 
 const connectDB = async () => {

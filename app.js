@@ -1,4 +1,4 @@
-//REQUIRES PRODUCTION PAYMENT
+// app.js
 require('dotenv').config();
 require('express-async-errors');
 const setupSwagger = require("./swagger");

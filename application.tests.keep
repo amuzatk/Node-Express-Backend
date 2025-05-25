@@ -1,0 +1,119 @@
+const request = require("supertest");
+const app = require("../app");
+const { connect, clearDatabase, closeDatabase } = require("./setupTestDB");
+
+jest.setTimeout(30000);
+
+let userToken, userId, jobId;
+
+beforeAll(async () => {
+  await connect();
+});
+
+beforeEach(async () => {
+  await clearDatabase();
+
+  const registerRes = await request(app).post("/api/v1/auth/register").send({
+    name: "App User",
+    email: "app@test.com",
+    password: "password123",
+  });
+
+  console.log("REGISTER RESPONSE:", registerRes.body);
+
+  userToken = registerRes.body.token;
+  userId = registerRes.body.user?._id;
+
+  const jobRes = await request(app)
+    .post("/api/v1/jobs")
+    .set("Authorization", `Bearer ${userToken}`)
+    .send({
+      company: "Application Corp",
+      position: "Frontend Developer",
+      status: "interview",
+      jobType: "full-time",
+      location: "Remote",
+    });
+
+  jobId = jobRes.body.data._id;
+});
+
+afterAll(async () => {
+  await closeDatabase();
+});
+
+describe("Applications Routes", () => {
+  it("should create a job application", async () => {
+    const res = await request(app)
+      .post("/api/v1/applications")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({
+        jobId,
+        coverLetter: "I am very interested in this position.",
+      });
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body.data).toHaveProperty("_id");
+    expect(res.body.data.jobId).toBe(jobId);
+    expect(String(res.body.data.applicantId)).toBe(String(userId));
+  });
+
+  it("should get applications by logged-in user", async () => {
+    await request(app)
+      .post("/api/v1/applications")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({
+        jobId,
+        coverLetter: "My cover letter",
+      });
+
+    const res = await request(app)
+      .get("/api/v1/applications/user/me")
+      .set("Authorization", `Bearer ${userToken}`);
+
+    expect(res.statusCode).toBe(200);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.count).toBe(1);
+  });
+
+  it("should get applications by job ID", async () => {
+    await request(app)
+      .post("/api/v1/applications")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({
+        jobId,
+        coverLetter: "I love this role",
+      });
+
+    const res = await request(app)
+      .get(`/api/v1/applications/job/${jobId}`)
+      .set("Authorization", `Bearer ${userToken}`);
+
+    expect(res.statusCode).toBe(200);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.count).toBe(1);
+  });
+
+  it("should not allow duplicate applications", async () => {
+    // First application
+    await request(app)
+      .post("/api/v1/applications")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({
+        jobId,
+        coverLetter: "Duplicate check 1",
+      });
+
+    // Second (duplicate) application
+    const res = await request(app)
+      .post("/api/v1/applications")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({
+        jobId,
+        coverLetter: "Duplicate check 2",
+      });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body.msg).toMatch(/already applied/i);
+  });
+});

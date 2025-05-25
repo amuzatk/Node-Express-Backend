@@ -2,23 +2,46 @@ const Application = require('../models/Applications');
 const {StatusCodes} = require('http-status-codes');
 const {BadRequestError, NotFoundError} = require('../errors')
 
-const createApplication = async (req,res)=>{
-    const {jobId, applicantId, coverLetter} = req.body;
+const createApplication = async (req, res) => {
+  const { jobId, coverLetter } = req.body;
+  const applicantId = req.user.userId;
 
-    const existingApplication = await Application.findOne({jobId, applicantId});
+  const existingApplication = await Application.findOne({ jobId, applicantId });
 
-    if(existingApplication){
-        throw new BadRequestError('You have already applied for this job');
-    }
+  if (existingApplication) {
+    throw new BadRequestError('You have already applied for this job');
+  }
 
-    const newApplication = new Application({
-        ...req.body,
-        // createdBy: req.user.userId//req.user is within the auth middleware
-    })
+  const newApplication = new Application({
+    jobId,
+    applicantId,
+    coverLetter,
+  });
 
-    await newApplication.save();
-    res.status(StatusCodes.CREATED).json({msg:'Application Submitted Successfully', data: newApplication})
-}
+  await newApplication.save();
+  res.status(StatusCodes.CREATED).json({
+    msg: 'Application Submitted Successfully',
+    data: newApplication,
+  });
+};
+
+// const createApplication = async (req,res)=>{
+//     const {jobId, applicantId, coverLetter} = req.body;
+
+//     const existingApplication = await Application.findOne({jobId, applicantId});
+
+//     if(existingApplication){
+//         throw new BadRequestError('You have already applied for this job');
+//     }
+
+//     const newApplication = new Application({
+//         ...req.body,
+//         // createdBy: req.user.userId//req.user is within the auth middleware
+//     })
+
+//     await newApplication.save();
+//     res.status(StatusCodes.CREATED).json({msg:'Application Submitted Successfully', data: newApplication})
+// }
 
 const getApplicationsByJob = async (req,res)=>{
     const { jobId } = req.params;
